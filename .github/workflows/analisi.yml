@@ -1,0 +1,31 @@
+name: Analisi Prysmian
+
+# Quando parte:
+on:
+  workflow_dispatch:        # <- ti dà un pulsante "Run" per lanciarlo a mano
+  schedule:
+    - cron: "0 6 * * 0"     # <- ogni domenica alle 06:00 UTC (08:00 in Italia)
+
+jobs:
+  analisi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prendi i file
+        uses: actions/checkout@v4
+
+      - name: Prepara Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installa le librerie
+        run: pip install -r requirements.txt
+
+      - name: Esegui l'analisi
+        run: python analizza.py
+
+      - name: Conserva il report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-prysmian
+          path: report.txt

@@ -6,7 +6,7 @@ on:
   schedule:
     # Sabato 06:00 UTC. I dati sono comunque quelli della chiusura di venerdì:
     # partire un giorno prima assorbe i ritardi di GitHub (anche di ore) e
-    # garantisce che la mail sia in casella prima del task notizie di domenica.
+    # garantisce che il report sia pronto prima del task notizie di domenica.
     - cron: "0 6 * * 6"
 
 # Permessi: scrivere il report nel repository

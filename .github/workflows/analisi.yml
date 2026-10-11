@@ -37,29 +37,13 @@ jobs:
           echo "DATA=${DATA}" >> "$GITHUB_ENV"
           mkdir -p report
           cp report.txt "report/${DATA}.txt"
+          # Copia a indirizzo fisso: il task Claude della domenica legge sempre questo file.
+          cp report.txt "report/ultimo.txt"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "report/${DATA}.txt"
+          git add "report/${DATA}.txt" "report/ultimo.txt"
           git commit -m "Report tecnico Prysmian ${DATA}" || echo "Nessuna modifica da salvare"
           git push
-
-      # Invio diretto via SMTP di Gmail. Non dipende dalle notifiche di GitHub.
-      # Richiede due secret nel repository (Settings > Secrets and variables > Actions):
-      #   MAIL_USERNAME = diego@errebi.studio
-      #   MAIL_PASSWORD = password per le app di Google (16 caratteri)
-      - name: Invia il report per mail
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          secure: true
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          from: Motore Prysmian <${{ secrets.MAIL_USERNAME }}>
-          to: diego@errebi.studio
-          subject: "Report tecnico Prysmian — ${{ env.DATA }}"
-          body: file://report.txt
-          convert_markdown: false
 
       - name: Conserva il report anche come allegato
         uses: actions/upload-artifact@v4

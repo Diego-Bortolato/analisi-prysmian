@@ -198,15 +198,37 @@ def componi_report(d: dict, note: list) -> str:
 # MAIN
 # ----------------------------------------------------------------------
 def main():
-    print(f"Scarico dati per {TICKER}...", file=sys.stderr)
-    df = scarica_dati(TICKER)
-    print(f"Ricevute {len(df)} candele. Calcolo indicatori...", file=sys.stderr)
+    # Uso senza argomenti: Prysmian, scrive report.txt (comportamento storico).
+    # Uso con argomenti: python analizza.py "TICK1,TICK2" "Nome" file_uscita.txt
+    #   TICK1,TICK2 = simboli alternativi dello stesso strumento, provati in ordine
+    #   (utile per gli ETF quotati su più borse: si usa il primo che risponde).
+    global TICKER, NOME
+    candidati = [TICKER]
+    uscita = "report.txt"
+    if len(sys.argv) >= 4:
+        candidati = [t.strip() for t in sys.argv[1].split(",") if t.strip()]
+        NOME = sys.argv[2]
+        uscita = sys.argv[3]
+
+    df, errori = None, []
+    for t in candidati:
+        print(f"Scarico dati per {t}...", file=sys.stderr)
+        try:
+            df = scarica_dati(t)
+            TICKER = t
+            break
+        except RuntimeError as e:
+            errori.append(f"{t}: {e}")
+    if df is None:
+        raise RuntimeError("Nessun simbolo ha restituito dati.\n" + "\n".join(errori))
+
+    print(f"Ricevute {len(df)} candele da {TICKER}. Calcolo indicatori...", file=sys.stderr)
     d = calcola(df)
     note = leggi(d)
     report = componi_report(d, note)
     print(report)
     # salva anche su file, così GitHub lo conserva come "risultato"
-    with open("report.txt", "w", encoding="utf-8") as f:
+    with open(uscita, "w", encoding="utf-8") as f:
         f.write(report + "\n")
 
 

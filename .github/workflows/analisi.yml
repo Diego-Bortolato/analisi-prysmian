@@ -6,7 +6,7 @@ on:
   schedule:
     # Sabato 06:00 UTC. I dati sono comunque quelli della chiusura di venerdì:
     # partire un giorno prima assorbe i ritardi di GitHub (anche di ore) e
-    # garantisce che il report sia pronto prima del task notizie di domenica.
+    # garantisce che il report sia pronto prima dei task di domenica.
     - cron: "0 6 * * 6"
 
 # Permessi: scrivere il report nel repository
@@ -28,26 +28,43 @@ jobs:
       - name: Installa le librerie
         run: pip install -r requirements.txt
 
-      - name: Esegui l'analisi
+      - name: Esegui l'analisi (Prysmian)
         run: python analizza.py
 
-      - name: Archivia il report nel repository
+      # ETF: se uno fallisce, Prysmian viene archiviato comunque.
+      # Simboli alternativi in ordine: Borsa Italiana, poi Xetra (entrambi in EUR).
+      - name: Esegui l'analisi (ETF Semiconduttori)
+        continue-on-error: true
+        run: python analizza.py "SEMI.MI,SEC0.DE" "iShares MSCI Global Semiconductors" report_semi.txt
+
+      - name: Esegui l'analisi (ETF FTSE All-World)
+        continue-on-error: true
+        run: python analizza.py "VWCE.MI,VWCE.DE" "Vanguard FTSE All-World" report_allworld.txt
+
+      - name: Archivia i report nel repository
         run: |
           DATA=$(TZ=Europe/Rome date +%F)
-          mkdir -p report
-          cp report.txt "report/${DATA}.txt"
-          # Indirizzi fissi letti dal task Claude della domenica:
+          # Per ogni strumento: archivio datato + indirizzi fissi letti dai task Claude
           # precedente.txt = report della settimana prima, ultimo.txt = report di oggi.
-          if [ -f report/ultimo.txt ]; then cp report/ultimo.txt report/precedente.txt; fi
-          cp report.txt "report/ultimo.txt"
+          archivia () {
+            SORGENTE="$1"; CARTELLA="$2"
+            [ -f "$SORGENTE" ] || { echo "Manca $SORGENTE: salto"; return 0; }
+            mkdir -p "$CARTELLA"
+            cp "$SORGENTE" "$CARTELLA/${DATA}.txt"
+            if [ -f "$CARTELLA/ultimo.txt" ]; then cp "$CARTELLA/ultimo.txt" "$CARTELLA/precedente.txt"; fi
+            cp "$SORGENTE" "$CARTELLA/ultimo.txt"
+          }
+          archivia report.txt report
+          archivia report_semi.txt report/etf-semiconduttori
+          archivia report_allworld.txt report/etf-all-world
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add report/
-          git commit -m "Report tecnico Prysmian ${DATA}" || echo "Nessuna modifica da salvare"
+          git commit -m "Report tecnici ${DATA}" || echo "Nessuna modifica da salvare"
           git push
 
-      - name: Conserva il report anche come allegato
+      - name: Conserva i report anche come allegato
         uses: actions/upload-artifact@v4
         with:
-          name: report-prysmian
-          path: report.txt
+          name: report-settimanali
+          path: report*.txt

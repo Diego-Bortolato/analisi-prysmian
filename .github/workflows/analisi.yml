@@ -4,12 +4,14 @@ name: Analisi Prysmian
 on:
   workflow_dispatch:        # <- pulsante "Run" per lanciarlo a mano
   schedule:
-    - cron: "0 6 * * 0"     # <- ogni domenica alle 06:00 UTC (GitHub può partire con ore di ritardo)
+    # Sabato 06:00 UTC. I dati sono comunque quelli della chiusura di venerdì:
+    # partire un giorno prima assorbe i ritardi di GitHub (anche di ore) e
+    # garantisce che la mail sia in casella prima del task notizie di domenica.
+    - cron: "0 6 * * 6"
 
-# Permessi: scrivere il report nel repository e aprire la Issue che genera la mail
+# Permessi: scrivere il report nel repository
 permissions:
   contents: write
-  issues: write
 
 jobs:
   analisi:
@@ -32,6 +34,7 @@ jobs:
       - name: Archivia il report nel repository
         run: |
           DATA=$(TZ=Europe/Rome date +%F)
+          echo "DATA=${DATA}" >> "$GITHUB_ENV"
           mkdir -p report
           cp report.txt "report/${DATA}.txt"
           git config user.name "github-actions[bot]"
@@ -40,14 +43,23 @@ jobs:
           git commit -m "Report tecnico Prysmian ${DATA}" || echo "Nessuna modifica da salvare"
           git push
 
-      - name: Pubblica il report come Issue (arriva per mail)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          DATA=$(TZ=Europe/Rome date +%F)
-          gh issue create \
-            --title "Report tecnico Prysmian — ${DATA}" \
-            --body-file report.txt
+      # Invio diretto via SMTP di Gmail. Non dipende dalle notifiche di GitHub.
+      # Richiede due secret nel repository (Settings > Secrets and variables > Actions):
+      #   MAIL_USERNAME = diego@errebi.studio
+      #   MAIL_PASSWORD = password per le app di Google (16 caratteri)
+      - name: Invia il report per mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          from: Motore Prysmian <${{ secrets.MAIL_USERNAME }}>
+          to: diego@errebi.studio
+          subject: "Report tecnico Prysmian — ${{ env.DATA }}"
+          body: file://report.txt
+          convert_markdown: false
 
       - name: Conserva il report anche come allegato
         uses: actions/upload-artifact@v4

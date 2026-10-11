@@ -2,9 +2,14 @@ name: Analisi Prysmian
 
 # Quando parte:
 on:
-  workflow_dispatch:        # <- ti dà un pulsante "Run" per lanciarlo a mano
+  workflow_dispatch:        # <- pulsante "Run" per lanciarlo a mano
   schedule:
-    - cron: "0 6 * * 0"     # <- ogni domenica alle 06:00 UTC (08:00 in Italia)
+    - cron: "0 6 * * 0"     # <- ogni domenica alle 06:00 UTC (GitHub può partire con ore di ritardo)
+
+# Permessi: scrivere il report nel repository e aprire la Issue che genera la mail
+permissions:
+  contents: write
+  issues: write
 
 jobs:
   analisi:
@@ -24,7 +29,27 @@ jobs:
       - name: Esegui l'analisi
         run: python analizza.py
 
-      - name: Conserva il report
+      - name: Archivia il report nel repository
+        run: |
+          DATA=$(TZ=Europe/Rome date +%F)
+          mkdir -p report
+          cp report.txt "report/${DATA}.txt"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "report/${DATA}.txt"
+          git commit -m "Report tecnico Prysmian ${DATA}" || echo "Nessuna modifica da salvare"
+          git push
+
+      - name: Pubblica il report come Issue (arriva per mail)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATA=$(TZ=Europe/Rome date +%F)
+          gh issue create \
+            --title "Report tecnico Prysmian — ${DATA}" \
+            --body-file report.txt
+
+      - name: Conserva il report anche come allegato
         uses: actions/upload-artifact@v4
         with:
           name: report-prysmian

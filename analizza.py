@@ -169,7 +169,8 @@ def leggi(d: dict) -> list:
 # 4. REPORT
 # ----------------------------------------------------------------------
 def componi_report(d: dict, note: list) -> str:
-    gen = dt.datetime.now().strftime("%d/%m/%Y %H:%M")
+    from zoneinfo import ZoneInfo  # ora italiana anche sul server GitHub (che è in UTC)
+    gen = dt.datetime.now(ZoneInfo("Europe/Rome")).strftime("%d/%m/%Y %H:%M")
     L = []
     L.append(f"REPORT TECNICO — {NOME} ({TICKER})")
     L.append(f"Dati al {d['data']} · generato il {gen}")

@@ -34,7 +34,6 @@ jobs:
       - name: Archivia il report nel repository
         run: |
           DATA=$(TZ=Europe/Rome date +%F)
-          echo "DATA=${DATA}" >> "$GITHUB_ENV"
           mkdir -p report
           cp report.txt "report/${DATA}.txt"
           # Indirizzi fissi letti dal task Claude della domenica:

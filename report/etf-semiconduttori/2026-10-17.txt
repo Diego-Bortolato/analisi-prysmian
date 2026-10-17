@@ -1,0 +1,19 @@
+REPORT TECNICO — iShares MSCI Global Semiconductors (SEC0.DE)
+Dati al 2026-10-16 · generato il 17/10/2026 12:28
+====================================================
+
+Prezzo di chiusura   nan EUR
+RSI (14)             36.29
+Media mobile 20gg    None
+Media mobile 50gg    None
+Media mobile 200gg   None
+Volume oggi          709,408
+Volume medio 20gg    581,148
+
+LETTURA DELLE CONDIZIONI TECNICHE
+----------------------------------------------------
+• RSI a 36.29: zona neutra.
+
+----------------------------------------------------
+Questo report descrive condizioni tecniche a scopo di studio.
+Non è un consiglio di investimento né un segnale operativo.

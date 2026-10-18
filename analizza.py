@@ -71,6 +71,7 @@ def rsi(close: pd.Series, n: int = 14) -> pd.Series:
 
 
 def calcola(df: pd.DataFrame) -> dict:
+    df = df.dropna(subset=["Close"])
     close = df["Close"].astype(float)
     vol = df["Volume"].astype(float)
 

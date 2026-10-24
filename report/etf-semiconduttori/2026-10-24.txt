@@ -1,0 +1,22 @@
+REPORT TECNICO — iShares MSCI Global Semiconductors (SEC0.DE)
+Dati al 2026-10-23 · generato il 24/10/2026 12:42
+====================================================
+
+Prezzo di chiusura   16.1 EUR
+RSI (14)             33.09
+Media mobile 20gg    18.13
+Media mobile 50gg    17.56
+Media mobile 200gg   15.47
+Volume oggi          551,942
+Volume medio 20gg    561,208
+
+LETTURA DELLE CONDIZIONI TECNICHE
+----------------------------------------------------
+• RSI a 33.09: zona neutra.
+• Media 20gg (18.13) sopra la media 50gg (17.56): tendenza di breve positiva.
+• Prezzo sopra la media 200gg (15.47): quadro di lungo costruttivo.
+• Ancora sotto la resistenza dei 60gg (19.75), a circa 22.7% di distanza.
+
+----------------------------------------------------
+Questo report descrive condizioni tecniche a scopo di studio.
+Non è un consiglio di investimento né un segnale operativo.

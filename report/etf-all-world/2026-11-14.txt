@@ -1,0 +1,22 @@
+REPORT TECNICO — Vanguard FTSE All-World (VWCE.MI)
+Dati al 2026-11-13 · generato il 14/11/2026 14:19
+====================================================
+
+Prezzo di chiusura   169.84 EUR
+RSI (14)             50.82
+Media mobile 20gg    169.56
+Media mobile 50gg    169.58
+Media mobile 200gg   160.69
+Volume oggi          28,474
+Volume medio 20gg    57,136
+
+LETTURA DELLE CONDIZIONI TECNICHE
+----------------------------------------------------
+• RSI a 50.82: zona neutra.
+• Media 20gg (169.56) sotto la media 50gg (169.58): tendenza di breve debole.
+• Prezzo sopra la media 200gg (160.69): quadro di lungo costruttivo.
+• Ancora sotto la resistenza dei 60gg (173.55), a circa 2.2% di distanza.
+
+----------------------------------------------------
+Questo report descrive condizioni tecniche a scopo di studio.
+Non è un consiglio di investimento né un segnale operativo.

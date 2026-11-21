@@ -1,0 +1,22 @@
+REPORT TECNICO — Prysmian (PRY.MI)
+Dati al 2026-11-20 · generato il 21/11/2026 15:29
+====================================================
+
+Prezzo di chiusura   100.5 EUR
+RSI (14)             38.56
+Media mobile 20gg    107.25
+Media mobile 50gg    114.46
+Media mobile 200gg   122.22
+Volume oggi          1,911,308
+Volume medio 20gg    1,303,917
+
+LETTURA DELLE CONDIZIONI TECNICHE
+----------------------------------------------------
+• RSI a 38.56: zona neutra.
+• Media 20gg (107.25) sotto la media 50gg (114.46): tendenza di breve debole.
+• Prezzo sotto la media 200gg (122.22): quadro di lungo sotto pressione.
+• Ancora sotto la resistenza dei 60gg (130.4), a circa 29.8% di distanza.
+
+----------------------------------------------------
+Questo report descrive condizioni tecniche a scopo di studio.
+Non è un consiglio di investimento né un segnale operativo.
